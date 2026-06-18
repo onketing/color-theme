@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <title>온케팅 컬러 테마</title>
+    <!--
+      GitHub Pages SPA 폴백: 깊은 경로(/choice)로 직접 접속/새로고침 시 404 대신
+      이 페이지가 떠서, 경로를 쿼리로 인코딩해 index.html 로 리다이렉트합니다.
+      index.html 의 복원 스크립트가 다시 원래 경로로 되돌립니다.
+      (Vercel 등 rewrite 지원 호스트에서는 vercel.json 이 처리하므로 이 파일은 안 쓰임)
+      pathSegmentsToKeep: 커스텀 도메인/루트 배포는 0, 프로젝트 페이지(user.github.io/repo)는 1.
+    -->
+    <script>
+      var pathSegmentsToKeep = 0;
+      var l = window.location;
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          l.pathname
+            .split("/")
+            .slice(0, 1 + pathSegmentsToKeep)
+            .join("/") +
+          "/?/" +
+          l.pathname
+            .slice(1)
+            .split("/")
+            .slice(pathSegmentsToKeep)
+            .join("/")
+            .replace(/&/g, "~and~") +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash,
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

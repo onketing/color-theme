@@ -8,7 +8,23 @@
       name="description"
       content="초이스 행정사 사무소 홈페이지 색감 제안 - 온케팅 컬러 테마 쇼케이스"
     />
-    <title>초이스 행정사 사무소 · 컬러 테마 제안 | 온케팅</title>
+    <title>온케팅 컬러 테마 제안</title>
+    <!-- GitHub Pages SPA 폴백 복원: 404.html 이 인코딩한 경로(?/...)를 원래 경로로 되돌림 -->
+    <script>
+      (function () {
+        var l = window.location;
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

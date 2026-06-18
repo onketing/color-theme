@@ -8,6 +8,9 @@ dist
 dist-ssr
 *.local
 
+# oh-my-claudecode local state
+.omc
+
 # logs
 logs
 *.log
