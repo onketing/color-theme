@@ -1,0 +1,25 @@
+{
+  "name": "color-theme",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "온케팅 컬러 테마 쇼케이스 - 클라이언트 색감 제안용",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@tailwindcss/vite": "^4.1.11",
+    "@vitejs/plugin-react": "^4.6.0",
+    "tailwindcss": "^4.1.11",
+    "vite": "^6.3.5"
+  }
+}
