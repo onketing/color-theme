@@ -22,10 +22,8 @@ export default function ClientShowcase({ client }) {
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-neutral-900 text-sm font-black text-white">
               O
             </span>
-            <div className="leading-tight">
-              <div className="text-[15px] font-extrabold tracking-tight text-neutral-900">
-                온케팅 <span className="font-medium text-neutral-400">| 컬러 테마 제안</span>
-              </div>
+            <div className="text-[15px] font-extrabold tracking-tight text-neutral-900">
+              온케팅 <span className="font-medium text-neutral-400">| 컬러 테마 제안</span>
             </div>
           </div>
           {client.referenceSite && (
@@ -80,55 +78,53 @@ export default function ClientShowcase({ client }) {
         </div>
       </section>
 
-      {/* 선택된 테마 상세 */}
+      {/* 선택된 테마 정보 + 팔레트 */}
       <section className="mx-auto mt-8 max-w-6xl px-5">
-        <div className="grid gap-8 lg:grid-cols-12">
-          {/* 좌: 테마 정보 + 팔레트 */}
-          <div className="lg:col-span-5">
-            <div className="flex items-center gap-2.5">
-              <h2 className="text-2xl font-black tracking-tight text-neutral-900">{active.name}</h2>
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-                  active.isReference
-                    ? "bg-neutral-900 text-white"
-                    : "bg-neutral-100 text-neutral-600"
-                }`}
-              >
-                {active.source}
-              </span>
-            </div>
-            <p className="mt-1 font-mono text-[12px] uppercase tracking-wider text-neutral-400">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-6 sm:p-7">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h2 className="text-2xl font-black tracking-tight text-neutral-900">{active.name}</h2>
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                active.isReference ? "bg-neutral-900 text-white" : "bg-neutral-100 text-neutral-600"
+              }`}
+            >
+              {active.source}
+            </span>
+            <span className="font-mono text-[12px] uppercase tracking-wider text-neutral-400">
               {active.nameEn}
-            </p>
-            <p className="mt-4 text-[14px] leading-relaxed text-neutral-600">
-              {active.description}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {active.mood.map((m) => (
-                <span
-                  key={m}
-                  className="rounded-md px-2.5 py-1 text-[12px] font-semibold"
-                  style={{ backgroundColor: c.accentSoft, color: c.primaryDark }}
-                >
-                  #{m}
-                </span>
-              ))}
-            </div>
-
-            <h3 className="mb-3 mt-8 text-[13px] font-bold uppercase tracking-widest text-neutral-400">
-              컬러 팔레트 · 클릭하여 복사
-            </h3>
-            <PaletteStrip colors={c} />
+            </span>
+          </div>
+          <p className="mt-3 max-w-3xl text-[14px] leading-relaxed text-neutral-600">
+            {active.description}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {active.mood.map((m) => (
+              <span
+                key={m}
+                className="rounded-md px-2.5 py-1 text-[12px] font-semibold"
+                style={{ backgroundColor: c.accentSoft, color: c.primaryDark }}
+              >
+                #{m}
+              </span>
+            ))}
           </div>
 
-          {/* 우: 라이브 미리보기 */}
-          <div className="lg:col-span-7">
-            <h3 className="mb-3 text-[13px] font-bold uppercase tracking-widest text-neutral-400">
-              실제 적용 화면 미리보기
-            </h3>
-            <HomepagePreview colors={c} preview={client.preview} />
-          </div>
+          <h3 className="mb-3 mt-7 text-[13px] font-bold uppercase tracking-widest text-neutral-400">
+            컬러 팔레트 · 클릭하여 복사
+          </h3>
+          <PaletteStrip colors={c} />
         </div>
+      </section>
+
+      {/* 전체 화면 미리보기 (풀폭) */}
+      <section className="mx-auto mt-10 max-w-6xl px-5">
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-[13px] font-bold uppercase tracking-widest text-neutral-400">
+            실제 적용 화면 미리보기 · 전체 페이지
+          </h3>
+          <span className="text-[12px] text-neutral-400">↓ 스크롤하여 전체 확인</span>
+        </div>
+        <HomepagePreview colors={c} preview={client.preview} />
       </section>
 
       {/* 전체 비교 그리드 */}
