@@ -1,18 +1,43 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import HomepagePreview from "./HomepagePreview.jsx";
 import PaletteStrip from "./PaletteStrip.jsx";
 import ThemeCard from "./ThemeCard.jsx";
 
 /**
  * 한 의뢰업체의 컬러 테마 쇼케이스.
- * 좌측 패널에서 테마를 선택하면 우측 미리보기가 해당 색감으로 즉시 칠해집니다.
+ * 좌측(데스크톱) 또는 상단 sticky 칩바(모바일)에서 테마를 선택하면
+ * 우측 미리보기가 해당 색감으로 부드럽게 칠해집니다.
  * @param {{ client: object }} props
  */
 export default function ClientShowcase({ client }) {
   const { themes } = client;
   const [activeId, setActiveId] = useState(themes[0].id);
-  const active = themes.find((t) => t.id === activeId) ?? themes[0];
+  const activeIndex = Math.max(
+    0,
+    themes.findIndex((t) => t.id === activeId),
+  );
+  const active = themes[activeIndex] ?? themes[0];
   const c = active.colors;
+
+  /** dir(-1/+1) 만큼 테마를 순환 전환 */
+  const cycle = useCallback(
+    (dir) =>
+      setActiveId((cur) => {
+        const i = themes.findIndex((t) => t.id === cur);
+        return themes[(i + dir + themes.length) % themes.length].id;
+      }),
+    [themes],
+  );
+
+  // 키보드 ← → 로도 전환
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowLeft") cycle(-1);
+      else if (e.key === "ArrowRight") cycle(1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [cycle]);
 
   return (
     <div className="min-h-screen">
@@ -40,10 +65,46 @@ export default function ClientShowcase({ client }) {
         </div>
       </header>
 
-      {/* 본문: 좌측 테마 선택 패널 · 우측 미리보기 */}
+      {/* ── 모바일 전용: 컴팩트 인트로 + sticky 가로 칩 선택바 ── */}
+      <div className="lg:hidden">
+        <div className="mx-auto max-w-[1500px] px-4 pb-3 pt-4">
+          <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3 py-1 text-[11.5px] font-bold text-white">
+            🎨 {client.concept}
+          </span>
+          <h1 className="mt-2.5 text-xl font-black tracking-tight text-neutral-900">
+            {client.name}
+          </h1>
+        </div>
+        <div className="sticky top-[60px] z-20 border-y border-neutral-200 bg-white/90 backdrop-blur">
+          <div className="mx-auto max-w-[1500px] overflow-x-auto px-4 py-2.5">
+            <div className="flex w-max gap-2">
+              {themes.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setActiveId(t.id)}
+                  className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                    t.id === activeId
+                      ? "border-neutral-900 bg-neutral-900 text-white"
+                      : "border-neutral-300 bg-white text-neutral-600"
+                  }`}
+                >
+                  <span
+                    className="h-3 w-3 rounded-full ring-1 ring-black/10"
+                    style={{ backgroundColor: t.colors.primary }}
+                  />
+                  {t.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 본문: 좌측 테마 선택 패널(데스크톱) · 우측 미리보기 */}
       <div className="mx-auto flex max-w-[1500px] flex-col gap-6 px-4 py-6 sm:px-5 lg:flex-row lg:items-start">
-        {/* ── 좌측 선택 패널 (sticky) ── */}
-        <aside className="lg:sticky lg:top-[73px] lg:max-h-[calc(100vh-89px)] lg:w-[360px] lg:shrink-0 lg:overflow-y-auto lg:pr-1">
+        {/* ── 좌측 선택 패널 (데스크톱 전용, sticky) ── */}
+        <aside className="hidden lg:sticky lg:top-[64px] lg:block lg:max-h-[calc(100vh-80px)] lg:w-[360px] lg:shrink-0 lg:overflow-y-auto lg:pr-1">
           <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3.5 py-1.5 text-[12px] font-bold text-white">
             🎨 {client.concept}
           </span>
@@ -74,24 +135,47 @@ export default function ClientShowcase({ client }) {
 
         {/* ── 우측 미리보기 ── */}
         <main className="min-w-0 flex-1">
-          {/* 선택 테마 정보 */}
+          {/* 선택 테마 정보 + 이전/다음 전환 */}
           <div className="mb-4 rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <h2 className="text-xl font-black tracking-tight text-neutral-900 sm:text-2xl">
-                {active.name}
-              </h2>
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-                  active.isReference
-                    ? "bg-neutral-900 text-white"
-                    : "bg-neutral-100 text-neutral-600"
-                }`}
-              >
-                {active.source}
-              </span>
-              <span className="font-mono text-[12px] uppercase tracking-wider text-neutral-400">
-                {active.nameEn}
-              </span>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h2 className="text-xl font-black tracking-tight text-neutral-900 sm:text-2xl">
+                  {active.name}
+                </h2>
+                <span
+                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                    active.isReference
+                      ? "bg-neutral-900 text-white"
+                      : "bg-neutral-100 text-neutral-600"
+                  }`}
+                >
+                  {active.source}
+                </span>
+                <span className="font-mono text-[12px] uppercase tracking-wider text-neutral-400">
+                  {active.nameEn}
+                </span>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => cycle(-1)}
+                  aria-label="이전 테마"
+                  className="grid h-8 w-8 place-items-center rounded-full border border-neutral-300 text-neutral-600 transition-colors hover:bg-neutral-100"
+                >
+                  <Chevron dir="left" />
+                </button>
+                <span className="w-12 text-center text-[12px] font-bold tabular-nums text-neutral-500">
+                  {activeIndex + 1} / {themes.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => cycle(1)}
+                  aria-label="다음 테마"
+                  className="grid h-8 w-8 place-items-center rounded-full border border-neutral-300 text-neutral-600 transition-colors hover:bg-neutral-100"
+                >
+                  <Chevron dir="right" />
+                </button>
+              </div>
             </div>
             <p className="mt-3 text-[13.5px] leading-relaxed text-neutral-600">
               {active.description}
@@ -114,7 +198,9 @@ export default function ClientShowcase({ client }) {
             <h3 className="text-[13px] font-bold uppercase tracking-widest text-neutral-400">
               실제 적용 화면 · 전체 페이지
             </h3>
-            <span className="text-[12px] text-neutral-400">↓ 스크롤하여 전체 확인</span>
+            <span className="hidden text-[12px] text-neutral-400 sm:inline">
+              ← → 키 또는 ◀ ▶ 로 테마 전환
+            </span>
           </div>
           <HomepagePreview colors={c} preview={client.preview} />
         </main>
@@ -128,5 +214,24 @@ export default function ClientShowcase({ client }) {
         </div>
       </footer>
     </div>
+  );
+}
+
+/** 이전/다음 전환용 셰브런 아이콘 */
+function Chevron({ dir }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {dir === "left" ? <path d="M15 18l-6-6 6-6" /> : <path d="M9 6l6 6-6 6" />}
+    </svg>
   );
 }

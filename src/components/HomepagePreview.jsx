@@ -10,7 +10,7 @@ export default function HomepagePreview({ colors, preview: p }) {
 
   return (
     <div
-      className="overflow-hidden rounded-2xl border shadow-xl"
+      className="theme-preview overflow-hidden rounded-2xl border shadow-xl"
       style={{ backgroundColor: c.background, borderColor: c.border, color: c.body }}
     >
       {/* 브라우저 크롬 */}

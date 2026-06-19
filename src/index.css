@@ -29,6 +29,12 @@
   }
 }
 
+/* 테마 전환 시 미리보기 색이 부드럽게 바뀌도록 (미세한 톤 차이 인지 보조) */
+.theme-preview,
+.theme-preview * {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
 /* Pretendard 웹폰트 (한글 가독성) */
 @font-face {
   font-family: "Pretendard Variable";
