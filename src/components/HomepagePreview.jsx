@@ -293,19 +293,22 @@ export default function HomepagePreview({ colors, preview: p }) {
         ))}
       </section>
 
-      {/* ── 푸터 ── */}
+      {/* ── 푸터 (기준 사이트 lawus.co.kr 처럼 짙은 브라운 밴드) ── */}
       <footer
         className="px-5 pt-12 sm:px-8"
-        style={{ backgroundColor: c.surfaceAlt, color: c.muted }}
+        style={{
+          backgroundColor: c.primaryDark,
+          color: `color-mix(in srgb, ${c.onPrimary} 70%, transparent)`,
+        }}
       >
         <div className="grid gap-8 pb-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <BrandMark c={c} brand={p.brand} />
+            <BrandMark c={c} brand={p.brand} onDark />
             <p className="mt-4 text-[12px] leading-relaxed">{p.footer.slogan}</p>
           </div>
           {p.footer.cols.map((col) => (
             <div key={col.title}>
-              <h4 className="text-[13px] font-bold" style={{ color: c.ink }}>
+              <h4 className="text-[13px] font-bold" style={{ color: c.onPrimary }}>
                 {col.title}
               </h4>
               <ul className="mt-3 space-y-1.5 text-[12px]">
@@ -317,7 +320,10 @@ export default function HomepagePreview({ colors, preview: p }) {
                 <button
                   type="button"
                   className="mt-3 rounded-md border px-3 py-1.5 text-[11px] font-semibold"
-                  style={{ borderColor: c.border, color: c.body }}
+                  style={{
+                    borderColor: `color-mix(in srgb, ${c.onPrimary} 35%, transparent)`,
+                    color: c.onPrimary,
+                  }}
                 >
                   {col.action}
                 </button>
@@ -327,7 +333,7 @@ export default function HomepagePreview({ colors, preview: p }) {
         </div>
         <div
           className="flex flex-col gap-2 border-t py-5 text-[11px] sm:flex-row sm:items-center sm:justify-between"
-          style={{ borderColor: c.border }}
+          style={{ borderColor: `color-mix(in srgb, ${c.onPrimary} 18%, transparent)` }}
         >
           <span>{p.footer.biz}</span>
           <span>{p.footer.copyright}</span>
@@ -337,21 +343,24 @@ export default function HomepagePreview({ colors, preview: p }) {
   );
 }
 
-/** 로고 + 업체명 마크 */
-function BrandMark({ c, brand }) {
+/** 로고 + 업체명 마크 (onDark: 짙은 배경의 푸터용 밝은 글자 변형) */
+function BrandMark({ c, brand, onDark = false }) {
+  const markColor = onDark ? c.onPrimary : c.primary;
+  const nameColor = onDark ? c.onPrimary : c.ink;
+  const enColor = onDark ? `color-mix(in srgb, ${c.onPrimary} 55%, transparent)` : c.muted;
   return (
     <div className="flex items-center gap-2.5">
       <span
         className="grid h-9 w-9 place-items-center rounded-md"
-        style={{ border: `1.5px solid ${c.primary}`, color: c.primary }}
+        style={{ border: `1.5px solid ${markColor}`, color: markColor }}
       >
         <ScaleOfJustice small />
       </span>
       <div className="leading-tight">
-        <div className="text-[15px] font-extrabold" style={{ color: c.ink }}>
+        <div className="text-[15px] font-extrabold" style={{ color: nameColor }}>
           {brand.name}
         </div>
-        <div className="text-[9px] tracking-[0.15em]" style={{ color: c.muted }}>
+        <div className="text-[9px] tracking-[0.15em]" style={{ color: enColor }}>
           {brand.nameEn}
         </div>
       </div>
