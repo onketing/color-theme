@@ -17,7 +17,7 @@ export default function ThemeCard({ theme, active, onSelect }) {
     <button
       type="button"
       onClick={onSelect}
-      className={`flex flex-col gap-3 rounded-2xl border bg-white p-4 text-left transition-all duration-150 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 ${
+      className={`flex w-full flex-col gap-3 rounded-2xl border bg-white p-4 text-left transition-all duration-150 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 ${
         active ? "border-neutral-800 shadow-lg ring-1 ring-neutral-800" : "border-neutral-200"
       }`}
     >
