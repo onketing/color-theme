@@ -3,10 +3,11 @@
 // 공유 시 클라이언트는 자기 업체 slug 링크로만 접근하며, 다른 업체는 보이지 않습니다.
 //
 // ※ 초이스 행정사 테마 원칙:
-//    로어스(lawus.co.kr)의 실제 브랜드 색 #7a6955(토프 브라운, --color-brand-600)를 기준으로,
-//    "같은 브라운을 살짝씩 톤업/톤다운"한 변형만 제공합니다. 배경(#fff/#f5f3ef)·텍스트(#222/#888)
-//    등 중성색은 로어스와 동일하게 고정하고, 브라운의 명도만 단계별로 조정합니다.
-//    (별도로 '클래식 골드'는 골드 계열 추가 제안)
+//    로어스(lawus.co.kr)의 실제 브랜드 색 #7a6955(토프 브라운, --color-brand-600)를 기준으로 합니다.
+//    배경(#fff/#f5f3ef)·텍스트(#222/#888) 등 중성색은 로어스와 동일하게 고정해 비교 가능하게 두고,
+//    - 기본 5종: 같은 브라운의 명도만 단계별로 톤업/톤다운
+//    - 확장 4종: 로어스 시그니처 브라운 기준 우드톤 변주 (허니 오크/마호가니/월넛/에스프레소)
+//    - 클래식 골드: 골드 계열 별도 제안
 
 export const clients = [
   {
@@ -18,7 +19,7 @@ export const clients = [
     concept: "로어스 토프 브라운 기준 · 톤업/톤다운 세트",
     proposedAt: "2026-06-18",
     intro:
-      "로어스(lawus.co.kr)의 실제 브랜드 색 #7a6955(토프 브라운)를 기준으로, 같은 브라운을 살짝씩 톤업·톤다운한 5종과 골드 계열 추가 제안 1종을 담았습니다. 배경·텍스트 등 중성색은 로어스와 동일하게 고정해, 브라운의 깊이만 단계별로 비교하실 수 있습니다. 테마를 선택하면 실제 '초이스 행정사 사무소' 홈페이지 전체 화면에 적용된 모습을 그대로 미리 보실 수 있습니다.",
+      "로어스(lawus.co.kr)의 실제 브랜드 색 #7a6955(토프 브라운)를 기준으로, 같은 브라운을 단계별로 톤업·톤다운한 기본 5종과 골드 계열 1종, 그리고 로어스 시그니처 브라운을 기준으로 우드톤 느낌으로 폭을 넓힌 확장 4종(허니 오크·마호가니·월넛·에스프레소)을 함께 담았습니다. 배경·텍스트 등 중성색은 로어스와 동일하게 고정해, 색감만 나란히 비교하실 수 있습니다. 테마를 선택하면 실제 '초이스 행정사 사무소' 홈페이지 전체 화면에 적용된 모습을 그대로 미리 보실 수 있습니다.",
 
     // 홈페이지 전체 미리보기에 들어갈 업체별 콘텐츠 (모든 테마가 이 콘텐츠를 공유, 색만 바뀜)
     preview: {
@@ -314,6 +315,110 @@ export const clients = [
           body: "#574a35",
           muted: "#90805f",
           border: "#e7dcc3",
+          onPrimary: "#ffffff",
+          onAccent: "#ffffff",
+        },
+      },
+      {
+        id: "honey-oak",
+        name: "허니 오크",
+        nameEn: "Honey Oak",
+        source: "확장 제안 (우드톤)",
+        tagline: "황금빛이 도는 밝고 따뜻한 원목",
+        description:
+          "로어스 시그니처 브라운에 황금빛을 더한, 밝은 오크 원목 느낌의 우드톤입니다. 같은 브라운 계열을 유지하면서 한층 환하고 따뜻한 분위기를 냅니다. 중성색은 로어스와 동일합니다.",
+        mood: ["따뜻함", "환함", "내추럴"],
+        colors: {
+          background: "#ffffff",
+          surface: "#f5f3ef",
+          surfaceAlt: "#ece2d0",
+          primary: "#9b7440",
+          primaryDark: "#745324",
+          primaryLight: "#bd9968",
+          accent: "#a47c3c",
+          accentSoft: "#ecdfc4",
+          ink: "#222222",
+          body: "#3f3a34",
+          muted: "#888888",
+          border: "#e4ddcd",
+          onPrimary: "#ffffff",
+          onAccent: "#ffffff",
+        },
+      },
+      {
+        id: "mahogany",
+        name: "마호가니",
+        nameEn: "Mahogany",
+        source: "확장 제안 (우드톤)",
+        tagline: "붉은빛이 도는 클래식 원목",
+        description:
+          "로어스 시그니처 브라운에 붉은 기를 더한 마호가니 원목 느낌의 우드톤입니다. 같은 브라운 계열 안에서 깊이 있고 클래식한 인상을 줍니다. 중성색은 로어스와 동일합니다.",
+        mood: ["클래식", "깊이", "고급"],
+        colors: {
+          background: "#ffffff",
+          surface: "#f5f3ef",
+          surfaceAlt: "#ecdfd7",
+          primary: "#82513c",
+          primaryDark: "#5f3829",
+          primaryLight: "#a8785f",
+          accent: "#8e5640",
+          accentSoft: "#ecd7cb",
+          ink: "#222222",
+          body: "#3f3a34",
+          muted: "#888888",
+          border: "#e4dad2",
+          onPrimary: "#ffffff",
+          onAccent: "#ffffff",
+        },
+      },
+      {
+        id: "walnut",
+        name: "월넛",
+        nameEn: "Walnut",
+        source: "확장 제안 (우드톤)",
+        tagline: "차분한 회갈색 원목",
+        description:
+          "로어스 시그니처 브라운을 살짝 회갈색으로 가라앉힌 월넛 원목 느낌의 우드톤입니다. 같은 브라운 계열 안에서 차분하고 세련된 인상을 줍니다. 중성색은 로어스와 동일합니다.",
+        mood: ["차분함", "세련", "안정"],
+        colors: {
+          background: "#ffffff",
+          surface: "#f5f3ef",
+          surfaceAlt: "#e9e2d6",
+          primary: "#6f6253",
+          primaryDark: "#52473a",
+          primaryLight: "#978a78",
+          accent: "#7c6d59",
+          accentSoft: "#e7ddcd",
+          ink: "#222222",
+          body: "#3f3a34",
+          muted: "#888888",
+          border: "#e1dccf",
+          onPrimary: "#ffffff",
+          onAccent: "#ffffff",
+        },
+      },
+      {
+        id: "espresso",
+        name: "에스프레소",
+        nameEn: "Espresso",
+        source: "확장 제안 (우드톤)",
+        tagline: "가장 깊고 진한 다크 원목",
+        description:
+          "로어스 시그니처 브라운을 가장 깊게 끌어내린 에스프레소 원목 느낌의 다크 우드톤입니다. 같은 브라운 계열에서 진중하고 묵직한 무게감을 줍니다. 중성색은 로어스와 동일합니다.",
+        mood: ["진중함", "묵직함", "프리미엄"],
+        colors: {
+          background: "#ffffff",
+          surface: "#f5f3ef",
+          surfaceAlt: "#e7ddcd",
+          primary: "#4f3f30",
+          primaryDark: "#352a1f",
+          primaryLight: "#7a6957",
+          accent: "#5e4934",
+          accentSoft: "#ddcfbb",
+          ink: "#222222",
+          body: "#3f3a34",
+          muted: "#888888",
+          border: "#e0d8c8",
           onPrimary: "#ffffff",
           onAccent: "#ffffff",
         },
