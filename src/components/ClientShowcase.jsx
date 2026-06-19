@@ -93,7 +93,7 @@ export default function ClientShowcase({ client }) {
                 {active.nameEn}
               </span>
             </div>
-            <p className="mt-3 max-w-3xl text-[13.5px] leading-relaxed text-neutral-600">
+            <p className="mt-3 text-[13.5px] leading-relaxed text-neutral-600">
               {active.description}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
