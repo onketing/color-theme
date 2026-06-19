@@ -177,7 +177,7 @@ export default function ClientShowcase({ client }) {
                 </button>
               </div>
             </div>
-            <p className="mt-3 text-[13.5px] leading-relaxed text-neutral-600">
+            <p className="mt-3 line-clamp-2 min-h-[2.75rem] text-[13.5px] leading-relaxed text-neutral-600">
               {active.description}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
