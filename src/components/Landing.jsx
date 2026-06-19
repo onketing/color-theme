@@ -7,9 +7,9 @@ export default function Landing({ notFound = false }) {
   return (
     <div className="grid min-h-screen place-items-center bg-[#f7f5f2] px-6">
       <div className="w-full max-w-md text-center">
-        <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-neutral-900 text-xl font-black text-white">
-          O
-        </span>
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-white shadow-sm">
+          <img src="/logo.png" alt="온케팅" className="h-12 w-12 object-contain" />
+        </div>
         <h1 className="mt-6 text-2xl font-black tracking-tight text-neutral-900">
           온케팅 컬러 테마
         </h1>

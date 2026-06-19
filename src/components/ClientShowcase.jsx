@@ -45,9 +45,7 @@ export default function ClientShowcase({ client }) {
       <header className="sticky top-0 z-30 border-b border-neutral-200/80 bg-white/85 backdrop-blur">
         <div className="mx-auto flex max-w-[1500px] items-center justify-between px-5 py-3.5">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-neutral-900 text-sm font-black text-white">
-              O
-            </span>
+            <img src="/logo.png" alt="온케팅" className="h-8 w-8 rounded-lg object-contain" />
             <div className="text-[15px] font-extrabold tracking-tight text-neutral-900">
               온케팅 <span className="font-medium text-neutral-400">| 컬러 테마 제안</span>
             </div>
@@ -177,7 +175,7 @@ export default function ClientShowcase({ client }) {
                 </button>
               </div>
             </div>
-            <p className="mt-3 line-clamp-2 min-h-[2.75rem] text-[13.5px] leading-relaxed text-neutral-600">
+            <p className="mt-3 line-clamp-2 min-h-11 text-[13.5px] leading-relaxed text-neutral-600">
               {active.description}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
