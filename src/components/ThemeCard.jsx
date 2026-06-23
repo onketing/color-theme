@@ -34,6 +34,11 @@ export default function ThemeCard({ theme, active, onSelect }) {
               원본
             </span>
           )}
+          {theme.isNew && (
+            <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">
+              NEW
+            </span>
+          )}
         </div>
         <p className="mt-0.5 text-[12px] text-neutral-500">{theme.tagline}</p>
       </div>

@@ -92,6 +92,15 @@ export default function ClientShowcase({ client }) {
                     style={{ backgroundColor: t.colors.primary }}
                   />
                   {t.name}
+                  {t.isNew && (
+                    <span
+                      className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold leading-none ${
+                        t.id === activeId ? "bg-white/25 text-white" : "bg-rose-500 text-white"
+                      }`}
+                    >
+                      NEW
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -152,6 +161,11 @@ export default function ClientShowcase({ client }) {
                 <span className="font-mono text-[12px] uppercase tracking-wider text-neutral-400">
                   {active.nameEn}
                 </span>
+                {active.isNew && (
+                  <span className="rounded-full bg-rose-500 px-2.5 py-0.5 text-[11px] font-bold text-white">
+                    NEW
+                  </span>
+                )}
               </div>
               <div className="flex shrink-0 items-center gap-1">
                 <button
