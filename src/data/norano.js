@@ -9,14 +9,15 @@
 // ※ ⚠️ **2026-09-08 개정.** 첫 판은 열 종이었고 초록을 3px 선·작은 점에만 썼다.
 //    실제 사이트 규칙에는 충실했지만 **테마를 바꿔도 화면이 거의 안 변했다**
 //    (사용자 지적). 색감을 고르는 화면인데 색이 안 보이면 쓸모가 없다. 그래서
-//      - 종을 10 → **15** 로 늘리고 축을 셋으로 갈랐다(밝은 종이 / 종이색 변경 / 어두운 화면)
+//      - 종을 10 → **27** 로 늘리고 축을 넷으로 갈랐다
+//        (밝은 종이 / 연한 초록 / 고급 초록 / 종이색 변경)
 //      - 미리보기를 **큰 색면 위주**로 다시 짰다(색면 히어로 · 숫자 밴드 · 색 계단 ·
 //        표 헤더 채움 · 전면 CTA 밴드). `NoranoPreview.jsx` 머리말 참고
 //    큰 면을 칠하는 색은 **언제나 `primaryDark`/`accent`** 다 — 밝은 `primary` 위에
 //    흰 글씨는 AA 에 못 미친다(커팅 매트 기준 3.13:1). 그 규칙은 깨지 않았다.
 //
 // ※ 색값은 **계산한 값**이다 — oklch 로 설계하고 sRGB 로 변환한 뒤 WCAG 상대휘도로
-//   대비를 쟀다. 열다섯 종 전부 아래 14개 항목이 AA(4.5:1) 이상이다:
+//   대비를 쟀다. 스물일곱 종 전부 아래 14개 항목이 AA(4.5:1) 이상이다:
 //     제목/종이1·2·3 · 제목/옅은면 · 본문/종이1·3 · 본문/옅은면 · 보조/종이3 ·
 //     글씨초록/종이1·2·3 · 글씨초록/옅은면 · 글씨면 위 글씨 · 매트면 위 글씨
 //   (norano-fashion `DESIGN.md` §2.3 과 같은 방식. 눈대중 값은 쓰지 않는다)
@@ -39,25 +40,22 @@
 export const GROUP_ORDER = [
   { key: "밝은 종이", note: "종이·글씨색 고정 · 초록만 다름" },
   { key: "연한 초록", note: "큰 색면이 연한 색 · 글씨는 어둡게" },
+  { key: "고급 초록", note: "저채도 한 줄기 · 명도 6단 사다리" },
   { key: "종이색 변경", note: "초록과 종이색을 함께 옮김" },
-  { key: "어두운 화면", note: "명암을 뒤집음" },
 ];
 
 /**
  * 과정 묶음 실 색상 — `globals.css` 의 `--color-spool-*` 실측값.
  *
- * ⚠️ `hexDark` 는 **어두운 화면 3종 전용**이다. 원래 다섯 색은 어두운 바탕 위에서
- *    거의 안 보인다(실측: #2B3FA8 on #0A130C 은 1.5:1). 색상은 그대로 두고 명도만
- *    올린 값이고, 어두운 종이 셋 전부에서 5.8:1 이상이다.
  * ⚠️ 실 색이 **브랜드 초록과 겹치는지**가 테마 선택의 판단 근거가 된다 — 파인 틸이
  *    'short'(청록)와 35°밖에 안 떨어지는 것이 그 예다.
  */
 export const SPOOLS = [
-  { key: "making", label: "옷 만들기", hex: "#2b3fa8", hexDark: "#759bf2", hue: 265 },
-  { key: "repair", label: "수선·리폼", hex: "#6d389e", hexDark: "#b287e1", hue: 305 },
-  { key: "license", label: "자격증", hex: "#96215e", hexDark: "#e379ae", hue: 350 },
-  { key: "pro", label: "실무·창업", hex: "#b85416", hexDark: "#f69462", hue: 47 },
-  { key: "short", label: "특강·체험", hex: "#0f6e92", hexDark: "#4eb7d5", hue: 220 },
+  { key: "making", label: "옷 만들기", hex: "#2b3fa8", hue: 265 },
+  { key: "repair", label: "수선·리폼", hex: "#6d389e", hue: 305 },
+  { key: "license", label: "자격증", hex: "#96215e", hue: 350 },
+  { key: "pro", label: "실무·창업", hex: "#b85416", hue: 47 },
+  { key: "short", label: "특강·체험", hex: "#0f6e92", hue: 220 },
 ];
 
 /**
@@ -174,20 +172,38 @@ const preview = {
  * 뒤의 둘은 종이색까지 함께 옮긴 안이다.
  */
 /**
- * 스물네 종. **네 묶음으로 갈랐고, 묶음마다 바꾸는 축이 다르다.**
+ * 스물일곱 종. **네 묶음, 묶음마다 바꾸는 축이 다르다.**
  *
  *   밝은 종이 (10) — 종이·글씨색을 노라노 현재 값으로 고정하고 **초록만** 바꾼다.
  *                    노랑 끝(116°)에서 파랑 끝(190°)까지 색상환을 훑는다.
  *   연한 초록 (7)  — **큰 색면 자체가 연한 색**인 묶음. 여기서만 `fill` 이 밝고
- *                    그 위 글씨가 어둡다(아래 ⚠️ 참고). 역시 노랑 → 파랑 순서다.
+ *                    그 위 글씨가 어둡다.
+ *   고급 초록 (6)  — **사다리다.** 아래 ★ 참고.
  *   종이색 변경 (4) — 초록과 **종이색을 함께** 옮긴다. 화면 전체의 온도가 바뀐다.
- *   어두운 화면 (3) — 명암을 **뒤집는다**.
+ *
+ * ★ 고급 초록은 초이스(로어스 브라운 명도 사다리)와 같은 방식이다 —
+ *   **hue(160°)와 낮은 채도를 묶어 두고 명도만 한 단계씩 내린다.** 인접 단끼리의
+ *   대비비가 1.14~1.17 로 고르게 잡혀 있어 여섯 단이 눈에 균등하게 읽힌다.
+ *   ⚠️ 어두운 쪽은 같은 명도 차가 대비로 덜 벌어져, 아래로 갈수록 간격을 **조금씩
+ *      넓혔다**. 등간격으로 내리면 마지막 두 단이 서로 구분되지 않는다(실측).
+ *
+ *   「고급」을 카테고리(럭셔리 웹)가 아니라 **주제**에서 뽑았다 — 옷에서 고급이
+ *   어디서 나오는가. 여섯 단의 이름은 실제로 그 밝기의 초록이 나오는 옷 재료이고,
+ *   이름 순서가 곧 밝기 순서다: 모직 → 트위드 → 코트 → 안감 → 벨벳 → 먹.
+ *   hue 를 160°(청록 쪽)로 비껴 둔 것도 근거가 있다. 모직·안감의 초록은 황변을
+ *   피하려고 청록 쪽으로 염색하고, 순색 초록 원단은 싸구려로 보인다.
+ *   ⚠️ **크림 배경 + 포레스트그린 + 세리프**로 가지 않았다. 그게 "고급"의 디폴트지만
+ *      루트 `CLAUDE.md` 금지 항목이고, 주제와 무관하게 나오는 관성이다.
+ *
+ * ⚠️ **2026-09-08 「어두운 화면」 3종을 걷어냈다(사용자 지시).** 되살리려면
+ *    `darkPaper()` 계열 종이 세트와 `onFill` 의 어두운 분기, 실 색의 `hexDark` 를
+ *    함께 복원해야 한다 — 지금은 그 셋 다 없다.
  *
  * ★ `fit` — 학원이 사전조사표 6번에서 고른 두 낱말 중 이 테마가 답하는 것.
  *   ("깔끔하고 단정한" · "밝고 활기찬", 2026-09-08 확인). 둘 다 있는 테마가
- *   지정에 가장 가깝다. **연한 초록 묶음에 둘 다 만족하는 안이 몰려 있는데**,
- *   밝으면서(→활기) 채도가 낮아(→단정) 두 낱말이 충돌하지 않는 유일한 구간이라서다.
- *   진한 초록은 대개 둘 중 하나만 답한다.
+ *   지정에 가장 가깝다. **연한 초록 묶음에 둘 다 만족하는 안이 몰려 있고**,
+ *   반대로 **고급 초록은 여섯 단 전부 "단정"에만 답한다** — 고급은 채도를 죽여서
+ *   만드는 것이라 "활기"와 방향이 반대다. 고르실 때 알고 계셔야 하는 상충이다.
  *
  * ⚠️ `group` 은 좌측 목록의 구분선 라벨이다. 값을 바꾸면 `GROUP_ORDER` 도 같이 고친다.
  */
@@ -223,6 +239,7 @@ const themes = [
       ramp: ["#c2e9ce", "#88c99e", "#48a870", "#278250", "#125c35"],
     },
   },
+
   {
     id: "yellow-green",
     name: "옐로우 그린",
@@ -253,6 +270,7 @@ const themes = [
       ramp: ["#dbe3b8", "#b4bf77", "#8f9c2c", "#6c7703", "#4b5300"],
     },
   },
+
   {
     id: "lime",
     name: "라임",
@@ -283,6 +301,7 @@ const themes = [
       ramp: ["#cee8ba", "#9dc67b", "#6ea536", "#4e7f14", "#345900"],
     },
   },
+
   {
     id: "grass",
     name: "그래스 그린",
@@ -313,6 +332,7 @@ const themes = [
       ramp: ["#c8e9c4", "#93c88d", "#5da756", "#3e8038", "#265b22"],
     },
   },
+
   {
     id: "olive",
     name: "올리브",
@@ -343,6 +363,7 @@ const themes = [
       ramp: ["#d7e3c9", "#acbf96", "#839c63", "#617745", "#43542c"],
     },
   },
+
   {
     id: "deep-forest",
     name: "딥 포레스트",
@@ -373,6 +394,7 @@ const themes = [
       ramp: ["#cce6d2", "#99c4a4", "#67a277", "#487c57", "#2e583b"],
     },
   },
+
   {
     id: "bottle",
     name: "보틀 그린",
@@ -403,6 +425,7 @@ const themes = [
       ramp: ["#c9e7d4", "#94c5a7", "#5ea47c", "#3f7e5b", "#27593e"],
     },
   },
+
   {
     id: "sage",
     name: "세이지",
@@ -433,6 +456,7 @@ const themes = [
       ramp: ["#d4e2d8", "#a8beaf", "#7d9b86", "#5c7664", "#3f5345"],
     },
   },
+
   {
     id: "emerald",
     name: "에메랄드",
@@ -463,6 +487,7 @@ const themes = [
       ramp: ["#beead7", "#80c9ad", "#34a984", "#088263", "#005c44"],
     },
   },
+
   {
     id: "pine-teal",
     name: "파인 틸",
@@ -495,6 +520,7 @@ const themes = [
       ramp: ["#c5e6e1", "#8dc4bc", "#52a299", "#337d74", "#1d5851"],
     },
   },
+
   {
     id: "pale-olive",
     name: "연한 올리브",
@@ -525,6 +551,7 @@ const themes = [
       ramp: ["#eff2e4", "#e1e6ce", "#d3dab9", "#c3cda3", "#b3be8a"],
     },
   },
+
   {
     id: "pistachio",
     name: "피스타치오",
@@ -555,6 +582,7 @@ const themes = [
       ramp: ["#ebf4e1", "#dae9ca", "#cadeb3", "#b9d29b", "#a6c381"],
     },
   },
+
   {
     id: "apple-mint",
     name: "애플민트",
@@ -585,6 +613,7 @@ const themes = [
       ramp: ["#e4f6e5", "#ceecd1", "#b8e3bd", "#a1d7a8", "#87ca91"],
     },
   },
+
   {
     id: "light-sage",
     name: "라이트 세이지",
@@ -615,6 +644,7 @@ const themes = [
       ramp: ["#ecf2ed", "#dce6de", "#cddacf", "#bbcdbf", "#a9beae"],
     },
   },
+
   {
     id: "mint",
     name: "민트",
@@ -645,6 +675,7 @@ const themes = [
       ramp: ["#e2f5ed", "#cbecde", "#b4e2cf", "#9bd6bf", "#7fc9ad"],
     },
   },
+
   {
     id: "celadon",
     name: "청자",
@@ -675,6 +706,7 @@ const themes = [
       ramp: ["#e7f3f0", "#d4e8e3", "#c1ddd6", "#acd0c7", "#96c2b7"],
     },
   },
+
   {
     id: "aqua",
     name: "아쿠아",
@@ -703,6 +735,187 @@ const themes = [
       onFill: "#0f1319",
       onAccent: "#0f1319",
       ramp: ["#e2f5f4", "#cbeae9", "#b4e0df", "#9bd4d3", "#7fc6c5"],
+    },
+  },
+
+  {
+    id: "lux-1-sage-wool",
+    name: "세이지 모직",
+    nameEn: "Sage Wool",
+    group: "고급 초록",
+    source: "1단계 · 사다리 맨 위",
+    fit: ["단정"],
+    tagline: "회색이 섞인 밝은 모직 · 채도는 기준의 3분의 1",
+    description:
+      "고급 여섯 단의 맨 위입니다. 밝은 모직에서 온 초록이고, 채도가 커팅 매트의 3분의 1이라 '초록'보다 '초록기가 도는 회색'으로 읽힙니다. 여기서 아래로 여섯 단, 같은 색이 한 단계씩 깊어집니다. 글씨 대비 6.5:1.",
+    mood: ["절제", "가벼움", "회녹"],
+    colors: {
+      background: "#fcfdfd",
+      surface: "#f5f6f7",
+      surfaceAlt: "#edeef0",
+      primary: "#729682",
+      primaryDark: "#3c6550",
+      primaryLight: "#a6c2b2",
+      accent: "#4b6e5b",
+      accentSoft: "#edf6f0",
+      ink: "#0f1319",
+      body: "#585b61",
+      muted: "#686a70",
+      border: "#dddfe1",
+      fill: "#3c6550",
+      onFill: "#ffffff",
+      onAccent: "#ffffff",
+      ramp: ["#a1c9b2", "#89af99", "#719681", "#597e6a", "#436753"],
+    },
+  },
+  {
+    id: "lux-2-herringbone",
+    name: "헤링본",
+    nameEn: "Herringbone",
+    group: "고급 초록",
+    source: "2단계 · 한 단계 아래",
+    fit: ["단정"],
+    tagline: "트위드 헤링본의 초록",
+    description:
+      "한 단계 내렸습니다. 헤링본 트위드를 확대하면 초록 실과 회색 실이 반씩 섞여 있는데, 그 혼방이 만드는 색입니다. 좋은 원단의 초록에 늘 회색이 섞여 있는 이유이자, 순색 초록이 싸구려로 보이는 이유이기도 합니다. 글씨 대비 7.4:1.",
+    mood: ["원단", "혼방", "차분"],
+    colors: {
+      background: "#fcfdfd",
+      surface: "#f5f6f7",
+      surfaceAlt: "#edeef0",
+      primary: "#5c836e",
+      primaryDark: "#305d46",
+      primaryLight: "#90af9d",
+      accent: "#3f6551",
+      accentSoft: "#ebf6ef",
+      ink: "#0f1319",
+      body: "#585b61",
+      muted: "#686a70",
+      border: "#dddfe1",
+      fill: "#305d46",
+      onFill: "#ffffff",
+      onAccent: "#ffffff",
+      ramp: ["#8ab59d", "#729c85", "#5a846d", "#446c56", "#2d5541"],
+    },
+  },
+  {
+    id: "lux-3-loden",
+    name: "로덴",
+    nameEn: "Loden",
+    group: "고급 초록",
+    source: "3단계 · 사다리 한가운데",
+    fit: ["단정"],
+    tagline: "로덴 코트의 초록 · 여섯 단의 중간",
+    description:
+      "오스트리아 로덴 코트의 색입니다. 여섯 단의 한가운데라 밝지도 어둡지도 않고, 고급 묶음에서 하나만 고르신다면 가장 무난한 자리입니다. 글씨 대비 8.7:1 이라 과정표와 수강료가 편하게 읽힙니다.",
+    mood: ["코트", "중립", "안정"],
+    colors: {
+      background: "#fcfdfd",
+      surface: "#f5f6f7",
+      surfaceAlt: "#edeef0",
+      primary: "#46715a",
+      primaryDark: "#22533b",
+      primaryLight: "#799c88",
+      accent: "#325c46",
+      accentSoft: "#e9f5ee",
+      ink: "#0f1319",
+      body: "#585b61",
+      muted: "#686a70",
+      border: "#dddfe1",
+      fill: "#22533b",
+      onFill: "#ffffff",
+      onAccent: "#ffffff",
+      ramp: ["#73a288", "#5b8970", "#44715a", "#2e5a44", "#17442f"],
+    },
+  },
+  {
+    id: "lux-4-lining",
+    name: "보틀 안감",
+    nameEn: "Bottle Lining",
+    group: "고급 초록",
+    source: "4단계",
+    fit: ["단정"],
+    tagline: "재킷 안감의 초록 · 값은 겉이 아니라 안에서 난다",
+    description:
+      "브리티시 테일러링의 안감 색입니다. 재킷의 값은 겉감이 아니라 안감에서 드러난다는 말이 있고, 그 안감이 대개 이 초록입니다. 이 학원에 남성복 양복 과정(본과 10개월)이 있다는 점에서 근거가 가장 가까운 단계입니다. 글씨 대비 10.2:1.",
+    mood: ["안감", "재단", "정장"],
+    colors: {
+      background: "#fcfdfd",
+      surface: "#f5f6f7",
+      surfaceAlt: "#edeef0",
+      primary: "#305f47",
+      primaryDark: "#104930",
+      primaryLight: "#638974",
+      accent: "#23523b",
+      accentSoft: "#e7f5ed",
+      ink: "#0f1319",
+      body: "#585b61",
+      muted: "#686a70",
+      border: "#dddfe1",
+      fill: "#104930",
+      onFill: "#ffffff",
+      onAccent: "#ffffff",
+      ramp: ["#5c8f74", "#45775d", "#2e6047", "#164932", "#00341e"],
+    },
+  },
+  {
+    id: "lux-5-velvet",
+    name: "벨벳",
+    nameEn: "Velvet",
+    group: "고급 초록",
+    source: "5단계",
+    fit: ["단정"],
+    tagline: "깊은 색에서만 성립하는 옷감",
+    description:
+      "벨벳은 파일 직물이라 빛을 먹습니다. 그래서 밝은 벨벳은 없고, 벨벳의 초록은 언제나 이 정도로 깊습니다. 큰 색면이 화면에서 가장 무거워지는 단계이고, 작품 사진이 그 위에 놓이면 사진만 떠오릅니다. 글씨 대비 11.9:1.",
+    mood: ["깊이", "무게", "광택"],
+    colors: {
+      background: "#fcfdfd",
+      surface: "#f5f6f7",
+      surfaceAlt: "#edeef0",
+      primary: "#194e35",
+      primaryDark: "#003f25",
+      primaryLight: "#4d7660",
+      accent: "#11472f",
+      accentSoft: "#e6f5ec",
+      ink: "#0f1319",
+      body: "#585b61",
+      muted: "#686a70",
+      border: "#dddfe1",
+      fill: "#003f25",
+      onFill: "#ffffff",
+      onAccent: "#ffffff",
+      ramp: ["#467c60", "#2e654a", "#154e35", "#003921", "#00240e"],
+    },
+  },
+  {
+    id: "lux-6-cheonghyeon",
+    name: "청현",
+    nameEn: "Cheonghyeon",
+    group: "고급 초록",
+    source: "6단계 · 사다리 맨 아래",
+    fit: ["단정"],
+    tagline: "먹빛이 도는 초록 · 여섯 단 중 가장 깊다",
+    description:
+      "전통 오방간색의 청현입니다. 검정이 아니라 초록기가 도는 먹으로, 여섯 단 중 가장 깊습니다. 한복 과정이 있는 학원이라는 점에서 이름의 근거가 있고, 재봉틀 주물의 색이기도 합니다. 글씨 대비 13.9:1 로 스물일곱 종 중 가장 강합니다.",
+    mood: ["먹빛", "전통", "극단"],
+    colors: {
+      background: "#fcfdfd",
+      surface: "#f5f6f7",
+      surfaceAlt: "#edeef0",
+      primary: "#003d24",
+      primaryDark: "#003319",
+      primaryLight: "#38644d",
+      accent: "#003b23",
+      accentSoft: "#e4f5eb",
+      ink: "#0f1319",
+      body: "#585b61",
+      muted: "#686a70",
+      border: "#dddfe1",
+      fill: "#003319",
+      onFill: "#ffffff",
+      onAccent: "#ffffff",
+      ramp: ["#2e6a4d", "#145337", "#003d23", "#002810", "#002008"],
     },
   },
   {
@@ -735,6 +948,7 @@ const themes = [
       ramp: ["#c9e7d4", "#94c5a7", "#5ea47c", "#3f7e5b", "#27593e"],
     },
   },
+
   {
     id: "mint-paper",
     name: "박하 종이",
@@ -765,6 +979,7 @@ const themes = [
       ramp: ["#c0ead3", "#83c9a6", "#3ca97b", "#18825a", "#005c3d"],
     },
   },
+
   {
     id: "concrete",
     name: "콘크리트 · 딥그린",
@@ -795,6 +1010,7 @@ const themes = [
       ramp: ["#cde5d1", "#9cc3a3", "#6ca177", "#4c7c56", "#32573a"],
     },
   },
+
   {
     id: "kraft-olive",
     name: "크래프트 · 올리브",
@@ -825,107 +1041,17 @@ const themes = [
       ramp: ["#dbe2c8", "#b2bd94", "#8c9a61", "#697542", "#49522a"],
     },
   },
-  {
-    id: "dark-forest",
-    name: "다크 포레스트",
-    nameEn: "Dark Forest",
-    group: "어두운 화면",
-    source: "화면 전체 반전",
-    fit: [],
-    tagline: "짙은 초록 바탕 + 밝은 초록 글씨",
-    description:
-      "여기서부터 세 종은 화면을 어둡게 뒤집습니다. 작품 사진이 화면에서 가장 밝은 것이 되어 사진이 강해지고, 학원이 아니라 브랜드·스튜디오처럼 읽힙니다. 대신 수강료표처럼 글자가 많은 화면은 읽기 부담이 있고, 고르신 두 낱말과는 방향이 다릅니다.",
-    mood: ["스튜디오", "사진 강조", "반전"],
-    colors: {
-      background: "#122219",
-      surface: "#1c2f24",
-      surfaceAlt: "#283c30",
-      primary: "#56dc85",
-      primaryDark: "#56dc85",
-      primaryLight: "#318850",
-      accent: "#269e5f",
-      accentSoft: "#193e2a",
-      ink: "#f3f8f5",
-      body: "#cbd3ce",
-      muted: "#aeb7b1",
-      border: "#3d4e43",
-      fill: "#56dc85",
-      onFill: "#0e1d14",
-      onAccent: "#0e1d14",
-      ramp: ["#194226", "#1c6236", "#248a4c", "#2bb463", "#43df7f"],
-    },
-  },
-  {
-    id: "midnight-lime",
-    name: "미드나잇 라임",
-    nameEn: "Midnight Lime",
-    group: "어두운 화면",
-    source: "가장 어두운 바탕 · 형광",
-    fit: ["활기"],
-    tagline: "거의 검정 + 형광 라임",
-    description:
-      "바탕을 거의 검정까지 내리고 형광에 가까운 라임을 얹었습니다. 스물네 종 중 대비가 가장 크고 인상이 가장 뾰족합니다. 패션 브랜드 쪽 화면에 가깝고, '깔끔하고 단정한'과는 정면으로 반대편에 있습니다.",
-    mood: ["강렬", "브랜드", "젊음"],
-    colors: {
-      background: "#0a130c",
-      surface: "#141f16",
-      surfaceAlt: "#1f2b21",
-      primary: "#aeec46",
-      primaryDark: "#aeec46",
-      primaryLight: "#669014",
-      accent: "#71a91e",
-      accentSoft: "#1e301a",
-      ink: "#f3f8f4",
-      body: "#ccd3cd",
-      muted: "#afb6b0",
-      border: "#323c34",
-      fill: "#aeec46",
-      onFill: "#060f08",
-      onAccent: "#060f08",
-      ramp: ["#2c3f0d", "#3f5e00", "#598400", "#75ad00", "#94d600"],
-    },
-  },
-  {
-    id: "deep-teal",
-    name: "딥 틸 다크",
-    nameEn: "Deep Teal Dark",
-    group: "어두운 화면",
-    source: "청록 어두운 바탕",
-    fit: [],
-    tagline: "짙은 청록 바탕 + 밝은 청록",
-    description:
-      "어두운 화면 셋 중 가장 차가운 쪽입니다. 초록보다 청록으로 읽혀 기술·설계 인상이 강하고, 도식화·작업지시서를 가르치는 면을 앞세우고 싶을 때 맞습니다. 반대로 '옷'보다 '기계'가 먼저 떠오르는 것이 위험입니다.",
-    mood: ["기술", "설계", "차가움"],
-    colors: {
-      background: "#082020",
-      surface: "#112d2d",
-      surfaceAlt: "#1c3a3a",
-      primary: "#2fd8d0",
-      primaryDark: "#2fd8d0",
-      primaryLight: "#0a8681",
-      accent: "#00958f",
-      accentSoft: "#0b3c3b",
-      ink: "#f1f9f8",
-      body: "#c9d4d3",
-      muted: "#acb7b6",
-      border: "#334c4b",
-      fill: "#2fd8d0",
-      onFill: "#041b1b",
-      onAccent: "#041b1b",
-      ramp: ["#10403e", "#02605c", "#008781", "#00b0a9", "#00dad2"],
-    },
-  },
 ];
 
 export const noranoClient = {
   slug: "norano",
   name: "노라노패션학원",
   shortName: "노라노",
-  concept: "초록 계열 24종 · 네 갈래로",
+  concept: "초록 계열 27종 · 네 갈래로",
   proposedAt: "2026-09-08",
   previewKind: "norano",
   intro:
-    "학원에서 지정하신 초록을 기준으로, 어떤 초록이냐를 스물네 가지로 갈라 놓았습니다. 밝은 종이 10종은 종이·글씨색을 고정하고 초록만 노랑 끝에서 파랑 끝까지 훑은 것, 연한 초록 7종은 큰 색면 자체를 옅은 색으로 바꾼 것, 종이색 변경 4종은 화면 전체의 온도를 함께 옮긴 것, 어두운 화면 3종은 명암을 아예 뒤집은 것입니다. 사전조사표에서 고르신 「깔끔하고 단정한」·「밝고 활기찬」 두 낱말에 각 테마가 답하는지를 카드에 표시해 뒀습니다 — 둘 다 붙은 안이 지정에 가장 가깝고, 연한 초록 묶음에 그것이 몰려 있습니다. 색값은 전부 계산해서 뽑았고 스물네 종 모두 대비 기준(AA 4.5:1)을 통과합니다.",
+    "학원에서 지정하신 초록을 기준으로, 어떤 초록이냐를 스물일곱 가지로 갈라 놓았습니다. 밝은 종이 10종은 종이·글씨색을 고정하고 초록만 노랑 끝에서 파랑 끝까지 훑은 것, 연한 초록 7종은 큰 색면 자체를 옅은 색으로 바꾼 것, 고급 초록 6종은 채도를 낮춘 초록 한 줄기를 한 단계씩 여섯 번 깊게 내린 사다리, 종이색 변경 4종은 화면 전체의 온도를 함께 옮긴 것입니다. 사전조사표에서 고르신 「깔끔하고 단정한」·「밝고 활기찬」 두 낱말에 각 테마가 답하는지를 카드에 표시해 뒀습니다 — 둘 다 붙은 안이 지정에 가장 가깝고, 고급 초록은 여섯 단 전부 「단정」에만 답합니다. 색값은 전부 계산해서 뽑았고 스물일곱 종 모두 대비 기준(AA 4.5:1)을 통과합니다.",
   preview,
   themes,
 };

@@ -33,18 +33,12 @@ import { isDark } from "../data/themes.js";
  * @param {{ colors: Record<string, string>, preview: object }} props
  */
 export default function NoranoPreview({ colors: c, preview: p }) {
-  // 어두운 테마에서는 실 색을 밝은 변형으로 바꾼다. 원래 값은 어두운 바탕에서 1.5:1 이다
-  const onDark = isDark(c.background);
   /**
    * 큰 색면(`fill`)이 연한 색인가. 연한 초록 7종이 여기 해당한다 —
    * 그 위에 얹는 선·점을 밝은 `primary` 로 두면 사라져서 진한 쪽으로 바꾼다.
    */
   const onPale = !isDark(c.fill);
-  const spool = (s) => (onDark ? s.hexDark : s.hex);
-  const spoolOf = (key) => {
-    const s = SPOOLS.find((x) => x.key === key);
-    return s ? spool(s) : c.primary;
-  };
+  const spoolOf = (key) => SPOOLS.find((x) => x.key === key)?.hex ?? c.primary;
 
   return (
     <div
@@ -213,7 +207,7 @@ export default function NoranoPreview({ colors: c, preview: p }) {
               className="flex items-center gap-1.5 text-[11.5px] font-bold"
               style={{ color: c.body }}
             >
-              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: spool(s) }} />
+              <span className="h-2 w-2 rounded-full" style={{ backgroundColor: s.hex }} />
               {s.label}
             </span>
           ))}
