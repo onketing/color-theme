@@ -12,7 +12,10 @@
 //    - 다른 톤 8종: 브라운에서 벗어난 신뢰·묵직 계열
 //        (딥 네이비/딥 포레스트/차콜 그라파이트/딥 버건디/딥 틸/슬레이트 블루/딥 플럼/올리브)
 
+import { noranoClient } from "./norano.js";
+
 export const clients = [
+  noranoClient,
   {
     slug: "choice",
     name: "초이스 행정사 사무소",

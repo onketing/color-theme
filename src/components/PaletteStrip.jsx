@@ -8,9 +8,12 @@ import Swatch from "./Swatch.jsx";
 export default function PaletteStrip({ colors }) {
   return (
     <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-5">
-      {swatchKeys.map(({ key, label, role }) => (
-        <Swatch key={key} hex={colors[key]} label={label} role={role} />
-      ))}
+      {/* 업체마다 갖는 키가 다르다 — 초이스 테마에는 `fill` 이 없다. 없는 키는 건너뛴다 */}
+      {swatchKeys
+        .filter(({ key }) => colors[key])
+        .map(({ key, label, role }) => (
+          <Swatch key={key} hex={colors[key]} label={label} role={role} />
+        ))}
     </div>
   );
 }

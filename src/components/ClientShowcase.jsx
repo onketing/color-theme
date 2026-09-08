@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
+import { GROUP_ORDER } from "../data/norano.js";
 import HomepagePreview from "./HomepagePreview.jsx";
+import NoranoPreview from "./NoranoPreview.jsx";
 import PaletteStrip from "./PaletteStrip.jsx";
 import ThemeCard from "./ThemeCard.jsx";
 
@@ -75,33 +77,39 @@ export default function ClientShowcase({ client }) {
         </div>
         <div className="sticky top-[60px] z-20 border-y border-neutral-200 bg-white/90 backdrop-blur">
           <div className="mx-auto max-w-[1500px] overflow-x-auto px-4 py-2.5">
-            <div className="flex w-max gap-2">
-              {themes.map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => setActiveId(t.id)}
-                  className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
-                    t.id === activeId
-                      ? "border-neutral-900 bg-neutral-900 text-white"
-                      : "border-neutral-300 bg-white text-neutral-600"
-                  }`}
-                >
-                  <span
-                    className="h-3 w-3 rounded-full ring-1 ring-black/10"
-                    style={{ backgroundColor: t.colors.primary }}
-                  />
-                  {t.name}
-                  {t.isNew && (
-                    <span
-                      className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold leading-none ${
-                        t.id === activeId ? "bg-white/25 text-white" : "bg-rose-500 text-white"
-                      }`}
-                    >
-                      NEW
+            <div className="flex w-max items-center gap-2">
+              {themes.map((t, i) => (
+                <Fragment key={t.id}>
+                  {t.group && t.group !== themes[i - 1]?.group && (
+                    <span className="ml-1 shrink-0 whitespace-nowrap pr-0.5 text-[10.5px] font-bold uppercase tracking-wider text-neutral-400">
+                      {t.group}
                     </span>
                   )}
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveId(t.id)}
+                    className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                      t.id === activeId
+                        ? "border-neutral-900 bg-neutral-900 text-white"
+                        : "border-neutral-300 bg-white text-neutral-600"
+                    }`}
+                  >
+                    <span
+                      className="h-3 w-3 rounded-full ring-1 ring-black/10"
+                      style={{ backgroundColor: t.colors.primary }}
+                    />
+                    {t.name}
+                    {t.isNew && (
+                      <span
+                        className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold leading-none ${
+                          t.id === activeId ? "bg-white/25 text-white" : "bg-rose-500 text-white"
+                        }`}
+                      >
+                        NEW
+                      </span>
+                    )}
+                  </button>
+                </Fragment>
               ))}
             </div>
           </div>
@@ -111,7 +119,7 @@ export default function ClientShowcase({ client }) {
       {/* 본문: 좌측 테마 선택 패널(데스크톱) · 우측 미리보기 */}
       <div className="mx-auto flex max-w-[1500px] flex-col gap-6 px-4 py-6 sm:px-5 lg:flex-row lg:items-start">
         {/* ── 좌측 선택 패널 (데스크톱 전용, sticky) ── */}
-        <aside className="hidden lg:sticky lg:top-[64px] lg:block lg:max-h-[calc(100vh-80px)] lg:w-[360px] lg:shrink-0 lg:overflow-y-auto lg:pr-1">
+        <aside className="hidden lg:sticky lg:top-[64px] lg:block lg:max-h-[calc(100vh-80px)] lg:w-[330px] lg:shrink-0 lg:overflow-y-auto lg:pr-1">
           <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3.5 py-1.5 text-[12px] font-bold text-white">
             🎨 {client.concept}
           </span>
@@ -120,17 +128,37 @@ export default function ClientShowcase({ client }) {
           </h1>
           <p className="mt-2 text-[13px] leading-relaxed text-neutral-500">{client.intro}</p>
 
-          <h2 className="mb-3 mt-6 text-[12px] font-bold uppercase tracking-widest text-neutral-400">
+          <h2 className="mb-2 mt-6 text-[12px] font-bold uppercase tracking-widest text-neutral-400">
             테마 선택 · {themes.length}종
           </h2>
+          {/* 고르신 두 낱말이 곧 판단 기준이다 — 목록 위에 한 번 설명하고 카드마다 표시한다 */}
+          <p className="mb-3 text-[12px] leading-relaxed text-neutral-500">
+            사전조사표에서 고르신{" "}
+            <strong className="font-semibold text-neutral-700">「깔끔하고 단정한」</strong> ·{" "}
+            <strong className="font-semibold text-neutral-700">「밝고 활기찬」</strong> 에 각 테마가
+            답하는지를 카드에 표시했습니다. 둘 다 붙은 안이 지정에 가장 가깝습니다.
+          </p>
           <div className="space-y-2.5">
-            {themes.map((t) => (
-              <ThemeCard
-                key={t.id}
-                theme={t}
-                active={t.id === activeId}
-                onSelect={() => setActiveId(t.id)}
-              />
+            {themes.map((t, i) => (
+              <div key={t.id}>
+                {/* `group` 이 바뀌는 지점마다 구분선. 축이 셋이라는 걸 목록에서 바로 보여준다 */}
+                {t.group && t.group !== themes[i - 1]?.group && (
+                  <div className={i === 0 ? "mb-2" : "mb-2 mt-6"}>
+                    <div className="flex items-baseline gap-2">
+                      <h3 className="text-[12.5px] font-extrabold text-neutral-900">{t.group}</h3>
+                      <span className="text-[11px] text-neutral-400">
+                        {GROUP_ORDER.find((g) => g.key === t.group)?.note}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 h-px bg-neutral-200" />
+                  </div>
+                )}
+                <ThemeCard
+                  theme={t}
+                  active={t.id === activeId}
+                  onSelect={() => setActiveId(t.id)}
+                />
+              </div>
             ))}
           </div>
 
@@ -189,9 +217,26 @@ export default function ClientShowcase({ client }) {
                 </button>
               </div>
             </div>
-            <p className="mt-3 line-clamp-2 min-h-11 text-[13.5px] leading-relaxed text-neutral-600">
+            <p className="mt-3 min-h-11 text-[13.5px] leading-relaxed text-neutral-600">
               {active.description}
             </p>
+            {active.caution && (
+              <p className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-[12.5px] leading-relaxed text-amber-900">
+                ⚠ {active.caution}
+              </p>
+            )}
+            {active.fit?.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {active.fit.map((f) => (
+                  <span
+                    key={f}
+                    className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[12px] font-bold text-emerald-800"
+                  >
+                    ✓ {f === "단정" ? "깔끔하고 단정한" : "밝고 활기찬"}
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="mt-3 flex flex-wrap gap-2">
               {active.mood.map((m) => (
                 <span
@@ -214,7 +259,11 @@ export default function ClientShowcase({ client }) {
               ← → 키 또는 ◀ ▶ 로 테마 전환
             </span>
           </div>
-          <HomepagePreview colors={c} preview={client.preview} />
+          {client.previewKind === "norano" ? (
+            <NoranoPreview colors={c} preview={client.preview} />
+          ) : (
+            <HomepagePreview colors={c} preview={client.preview} />
+          )}
         </main>
       </div>
 

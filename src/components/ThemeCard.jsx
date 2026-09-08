@@ -4,12 +4,14 @@
  */
 export default function ThemeCard({ theme, active, onSelect }) {
   const c = theme.colors;
+  // `fill`(큰 색면)이 있으면 그걸 보여준다 — 연한 초록 묶음은 fill 이 곧 그 테마의 인상이다.
+  // `surface` 는 거의 흰색이라 카드에서 정보가 없어 뺐다.
   const dots = [
     { role: "primary", hex: c.primary },
+    { role: "fill", hex: c.fill ?? c.surface },
     { role: "primaryDark", hex: c.primaryDark },
     { role: "accent", hex: c.accent },
     { role: "accentSoft", hex: c.accentSoft },
-    { role: "surface", hex: c.surface },
     { role: "ink", hex: c.ink },
   ];
 
@@ -39,8 +41,26 @@ export default function ThemeCard({ theme, active, onSelect }) {
               NEW
             </span>
           )}
+          {theme.isPaperShift && (
+            <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white">
+              종이색도 변경
+            </span>
+          )}
         </div>
         <p className="mt-0.5 text-[12px] text-neutral-500">{theme.tagline}</p>
+        {/* 학원이 사전조사표 6번에서 고른 두 낱말 중 이 테마가 답하는 것 */}
+        {theme.fit?.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {theme.fit.map((f) => (
+              <span
+                key={f}
+                className="rounded border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[10.5px] font-bold text-emerald-800"
+              >
+                {f === "단정" ? "깔끔·단정" : "밝고 활기"}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </button>
   );

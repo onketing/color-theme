@@ -5,6 +5,7 @@
 export const swatchKeys = [
   { key: "primary", label: "주조색", role: "Primary" },
   { key: "primaryDark", label: "주조색 (진하게)", role: "Primary Dark" },
+  { key: "fill", label: "큰 색면", role: "Fill" },
   { key: "accent", label: "강조색", role: "Accent" },
   { key: "accentSoft", label: "강조색 (옅게)", role: "Accent Soft" },
   { key: "ink", label: "제목 텍스트", role: "Ink" },
