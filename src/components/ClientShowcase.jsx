@@ -13,7 +13,10 @@ import ThemeCard from "./ThemeCard.jsx";
  */
 export default function ClientShowcase({ client }) {
   const { themes } = client;
-  const [activeId, setActiveId] = useState(themes[0].id);
+  // 확정된 테마가 있으면 그걸 열어 둔다. 없으면 첫 번째
+  const [activeId, setActiveId] = useState(
+    () => themes.find((t) => t.isChosen)?.id ?? themes[0].id,
+  );
   const activeIndex = Math.max(
     0,
     themes.findIndex((t) => t.id === activeId),

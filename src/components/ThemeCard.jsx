@@ -31,6 +31,11 @@ export default function ThemeCard({ theme, active, onSelect }) {
       <div>
         <div className="flex items-center gap-2">
           <h3 className="text-[15px] font-extrabold text-neutral-900">{theme.name}</h3>
+          {theme.isChosen && (
+            <span className="rounded-full bg-emerald-600 px-2 py-0.5 text-[10px] font-bold text-white">
+              ✓ 확정
+            </span>
+          )}
           {theme.isReference && (
             <span className="rounded-full bg-neutral-900 px-2 py-0.5 text-[10px] font-bold text-white">
               원본
